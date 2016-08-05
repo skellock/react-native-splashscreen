@@ -26,19 +26,15 @@ public class RCTSplashScreen extends ReactContextBaseJavaModule {
 
     private Activity activity;
 
-    public RCTSplashScreen(ReactApplicationContext reactContext, Activity activity) {
+    public RCTSplashScreen(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.activity = activity;
+
         showSplashScreen();
     }
 
     @Override
     public String getName() {
         return "SplashScreen";
-    }
-
-    protected Activity getActivity() {
-        return activity;
     }
 
     @ReactMethod
@@ -53,7 +49,7 @@ public class RCTSplashScreen extends ReactContextBaseJavaModule {
 
 
     private void removeSplashScreen() {
-        getActivity().runOnUiThread(new Runnable() {
+        getCurrentActivity().runOnUiThread(new Runnable() {
             public void run() {
                 if (splashDialog != null && splashDialog.isShowing()) {
                     AlphaAnimation fadeOut = new AlphaAnimation(1, 0);
@@ -80,9 +76,9 @@ public class RCTSplashScreen extends ReactContextBaseJavaModule {
     }
 
     private int getSplashId() {
-        int drawableId = getActivity().getResources().getIdentifier("splash", "drawable", getActivity().getClass().getPackage().getName());
+        int drawableId = getCurrentActivity().getResources().getIdentifier("splash", "drawable", getCurrentActivity().getClass().getPackage().getName());
         if (drawableId == 0) {
-            drawableId = getActivity().getResources().getIdentifier("splash", "drawable", getActivity().getPackageName());
+            drawableId = getCurrentActivity().getResources().getIdentifier("splash", "drawable", getCurrentActivity().getPackageName());
         }
         return drawableId;
     }
@@ -92,11 +88,11 @@ public class RCTSplashScreen extends ReactContextBaseJavaModule {
         if ((splashDialog != null && splashDialog.isShowing())||(drawableId == 0)) {
             return;
         }
-        getActivity().runOnUiThread(new Runnable() {
+        getCurrentActivity().runOnUiThread(new Runnable() {
             public void run() {
                 // Get reference to display
-                Display display = getActivity().getWindowManager().getDefaultDisplay();
-                Context context = getActivity();
+                Display display = getCurrentActivity().getWindowManager().getDefaultDisplay();
+                Context context = getCurrentActivity();
 
                 // Use an ImageView to render the image because of its flexible scaling options.
                 splashImageView = new ImageView(context);
@@ -111,7 +107,7 @@ public class RCTSplashScreen extends ReactContextBaseJavaModule {
                 // Create and show the dialog
                 splashDialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);
                 // check to see if the splash screen should be full screen
-                if ((getActivity().getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                if ((getCurrentActivity().getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN)
                         == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
                     splashDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                             WindowManager.LayoutParams.FLAG_FULLSCREEN);

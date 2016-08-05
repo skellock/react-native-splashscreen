@@ -6,9 +6,6 @@
 */
 'use strict';
 
-var React = require('react-native');
-var {
-    NativeModules,
-} = React;
+import { NativeModules } from 'react-native'
 
 module.exports = NativeModules.SplashScreen;
